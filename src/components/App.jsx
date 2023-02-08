@@ -20,7 +20,6 @@ export const App = () => {
   const [query, setQuery] = useState('');
   const [loadMore, setLoadMore] = useState(null);
 
-
   const getLargeImgUrl = imgUrl => {
     setLargeImageUrl(imgUrl);
     toggleModal();
@@ -41,24 +40,25 @@ export const App = () => {
     setPage(prevState => prevState + 1);
   };
 
-  useEffect(() => {
+   useEffect(() => {
     if (!query) {
-      return
-    };
+      return;
+    }
+
     setStatus('loading');
     setLoadMore(null);
 
     fetchPictures(query, page)
-      .then(event => {
-        setPictures(prevState => [...prevState, ...event.hits]);
+      .then(e => {
+        setPictures(prevState => [...prevState, ...e.hits]);
         setStatus('idle');
-        setLoadMore(12 - event.hits.lenght);
+        setLoadMore(12 - e.hits.length);
       })
       .catch(error => console.log(error));
-  },[page, query]);
+  }, [page, query]);
   
   return (
-    <Wrapper>
+     <Wrapper>
       <GlobalStyle />
       <Searchbar onSubmit={searchResult} />
       {showModal && <Modal imgUrl={largeImageUrl} onClose={toggleModal} />}
